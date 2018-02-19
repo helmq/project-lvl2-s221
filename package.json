@@ -1,5 +1,5 @@
 {
-  "name": "gendiff",
+  "name": "gendiff-helmq",
   "version": "0.0.1",
   "description": "Compares two configuration files and shows a difference.",
   "main": "dist/index.js",
@@ -10,6 +10,9 @@
     "prepublishOnly": "npm run build",
     "eslint": "eslint"
   },
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/helmq/project-lvl2-s221.git"
