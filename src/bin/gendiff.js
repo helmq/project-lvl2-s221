@@ -1,4 +1,4 @@
 #!/usr/bin/env node
-import start from '../index';
+import start from '..';
 
-console.log(start());
+start();
