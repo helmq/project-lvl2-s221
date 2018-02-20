@@ -1,39 +1,45 @@
 import _ from 'lodash';
 import path from 'path';
-import YAMLData from './data/YAMLData';
-import JSONData from './data/JSONData';
+import fs from 'fs';
+import yaml from 'js-yaml';
 
-const buildObject = (filepath) => {
-  const extension = path.extname(filepath);
+const buildData = (extension, data) => {
   switch (extension) {
     case '.yaml':
-      return new YAMLData(filepath).getData();
+      return yaml.safeLoad(data);
     case '.json':
-      return new JSONData(filepath).getData();
+      return JSON.parse(data);
     default:
       return null;
   }
 };
 
-export default (path1, path2) => {
-  const before = buildObject(path1);
-  const after = buildObject(path2);
+export const gendiffArr = (path1, path2) => {
+  const data1 = fs.readFileSync(path1);
+  const extension1 = path.extname(path1);
+  const data2 = fs.readFileSync(path2);
+  const extension2 = path.extname(path2);
+  const before = buildData(extension1, data1);
+  const after = buildData(extension2, data2);
   if (!before || !after) {
     return 'Error';
   }
   const keys = _.union(Object.keys(before), Object.keys(after));
-  const result = keys.map((key) => {
+  return keys.reduce((acc, key) => {
     if (!before[key]) {
-      return `+ ${key}: ${after[key]}`;
+      return [...acc, `+ ${key}: ${after[key]}`];
     }
     if (!after[key]) {
-      return `- ${key}: ${before[key]}`;
+      return [...acc, `- ${key}: ${before[key]}`];
     }
     if (before[key] !== after[key]) {
-      return `+ ${key}: ${after[key]}\n\t- ${key}: ${before[key]}`;
+      return [...acc, `+ ${key}: ${after[key]}`, `- ${key}: ${before[key]}`];
     }
-    return `  ${key}: ${after[key]}`;
-  });
+    return [...acc, `  ${key}: ${after[key]}`];
+  }, []);
+};
 
+export default (path1, path2) => {
+  const result = gendiffArr(path1, path2);
   return `{\n\t${result.join('\n\t')}\n}`;
 };
