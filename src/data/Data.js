@@ -5,7 +5,7 @@ export default class Data {
     this.file = fs.readFileSync(filepath);
   }
 
-  getObject() {
-    return this.object;
+  getData() {
+    return this.data;
   }
 }

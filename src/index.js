@@ -1,15 +1,15 @@
 import _ from 'lodash';
 import path from 'path';
-import YAMLData from './YAMLData';
-import JSONData from './JSONData';
+import YAMLData from './data/YAMLData';
+import JSONData from './data/JSONData';
 
 const buildObject = (filepath) => {
   const extension = path.extname(filepath);
   switch (extension) {
     case '.yaml':
-      return new YAMLData(filepath).getObject();
+      return new YAMLData(filepath).getData();
     case '.json':
-      return new JSONData(filepath).getObject();
+      return new JSONData(filepath).getData();
     default:
       return null;
   }
