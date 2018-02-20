@@ -1,9 +1,26 @@
 import _ from 'lodash';
-import fs from 'fs';
+import path from 'path';
+import YAMLData from './YAMLData';
+import JSONData from './JSONData';
+
+const buildObject = (filepath) => {
+  const extension = path.extname(filepath);
+  switch (extension) {
+    case '.yaml':
+      return new YAMLData(filepath).getObject();
+    case '.json':
+      return new JSONData(filepath).getObject();
+    default:
+      return null;
+  }
+};
 
 export default (path1, path2) => {
-  const before = JSON.parse(fs.readFileSync(path1));
-  const after = JSON.parse(fs.readFileSync(path2));
+  const before = buildObject(path1);
+  const after = buildObject(path2);
+  if (!before || !after) {
+    return 'Error';
+  }
   const keys = _.union(Object.keys(before), Object.keys(after));
   const result = keys.map((key) => {
     if (!before[key]) {

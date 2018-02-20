@@ -1,0 +1,8 @@
+plugins:
+  2
+env:
+  node
+no-console:
+  true
+extends:
+  5

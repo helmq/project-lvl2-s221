@@ -1,0 +1,8 @@
+env:
+  ruby
+no-debugger:
+  true
+no-console:
+  true
+extends:
+  12
