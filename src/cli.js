@@ -1,8 +1,9 @@
 import commander from 'commander';
 import gendiff from '.';
+import pjson from '../package.json';
 
 export default () => commander
-  .version('0.1.0')
+  .version(pjson.version)
   .arguments('<firstConfig> <secondConfig>')
   .action((first, second) => {
     console.log(gendiff(first, second));
