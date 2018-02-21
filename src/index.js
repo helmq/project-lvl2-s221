@@ -3,43 +3,36 @@ import path from 'path';
 import fs from 'fs';
 import yaml from 'js-yaml';
 
-const buildData = (extension, data) => {
-  switch (extension) {
-    case '.yaml':
-      return yaml.safeLoad(data);
-    case '.json':
-      return JSON.parse(data);
-    default:
-      return null;
-  }
+const parsers = {
+  '.yaml': yaml.safeLoad,
+  '.json': JSON.parse,
 };
 
-export const gendiffArr = (path1, path2) => {
-  const data1 = fs.readFileSync(path1);
-  const extension1 = path.extname(path1);
-  const data2 = fs.readFileSync(path2);
-  const extension2 = path.extname(path2);
-  const before = buildData(extension1, data1);
-  const after = buildData(extension2, data2);
-  if (!before || !after) {
-    return 'Error';
-  }
-  const keys = _.union(Object.keys(before), Object.keys(after));
-  return keys.reduce((acc, key) => {
-    if (!before[key]) {
-      return [...acc, `+ ${key}: ${after[key]}`];
-    }
-    if (!after[key]) {
-      return [...acc, `- ${key}: ${before[key]}`];
-    }
-    if (before[key] !== after[key]) {
-      return [...acc, `+ ${key}: ${after[key]}`, `- ${key}: ${before[key]}`];
-    }
-    return [...acc, `  ${key}: ${after[key]}`];
-  }, []);
-};
+const buildData = (extension, file) =>
+  (parsers[extension] ? parsers[extension](file) : null);
 
 export default (path1, path2) => {
-  const result = gendiffArr(path1, path2);
+  const file1 = fs.readFileSync(path1);
+  const extension1 = path.extname(path1);
+  const file2 = fs.readFileSync(path2);
+  const extension2 = path.extname(path2);
+  const data1 = buildData(extension1, file1);
+  const data2 = buildData(extension2, file2);
+  if (!data1 || !data2) {
+    return 'Error';
+  }
+  const keys = _.union(Object.keys(data1), Object.keys(data2));
+  const result = _.flatten(keys.map((key) => {
+    if (!data1[key]) {
+      return `+ ${key}: ${data2[key]}`;
+    }
+    if (!data2[key]) {
+      return `- ${key}: ${data1[key]}`;
+    }
+    if (data1[key] !== data2[key]) {
+      return [`+ ${key}: ${data2[key]}`, `- ${key}: ${data1[key]}`];
+    }
+    return `  ${key}: ${data2[key]}`;
+  }));
   return `{\n\t${result.join('\n\t')}\n}`;
 };
