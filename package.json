@@ -6,6 +6,10 @@
   "bin": {
     "gendiff": "dist/bin/gendiff.js"
   },
+  "jest": {
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": ["<rootDir>/__tests__/__fixtures__/"]
+  },
   "scripts": {
     "test": "jest",
     "babel-node": "babel-node",
