@@ -1,6 +1,7 @@
 import gendiff from '../src';
 import expectedJSON from './__fixtures__/json/expected';
 import expectedYAML from './__fixtures__/yaml/expected';
+import expectedini from './__fixtures__/ini/expected';
 
 const fixturesDir = './__tests__/__fixtures__';
 
@@ -12,4 +13,9 @@ test('gendiff JSON', () => {
 test('gendiff YAML', () => {
   const result = gendiff(`${fixturesDir}/yaml/first.yaml`, `${fixturesDir}/yaml/second.yaml`);
   expect(result).toBe(expectedYAML);
+});
+
+test('gendiff ini', () => {
+  const result = gendiff(`${fixturesDir}/ini/first.ini`, `${fixturesDir}/ini/second.ini`);
+  expect(result).toBe(expectedini);
 });

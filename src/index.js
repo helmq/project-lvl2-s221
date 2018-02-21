@@ -2,19 +2,21 @@ import _ from 'lodash';
 import path from 'path';
 import fs from 'fs';
 import yaml from 'js-yaml';
+import ini from 'ini';
 
 const parsers = {
   '.yaml': yaml.safeLoad,
   '.json': JSON.parse,
+  '.ini': ini.parse,
 };
 
 const buildData = (extension, file) =>
   (parsers[extension] ? parsers[extension](file) : null);
 
 export default (path1, path2) => {
-  const file1 = fs.readFileSync(path1);
+  const file1 = fs.readFileSync(path1, 'utf-8');
   const extension1 = path.extname(path1);
-  const file2 = fs.readFileSync(path2);
+  const file2 = fs.readFileSync(path2, 'utf-8');
   const extension2 = path.extname(path2);
   const data1 = buildData(extension1, file1);
   const data2 = buildData(extension2, file2);
