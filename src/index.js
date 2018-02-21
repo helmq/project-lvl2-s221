@@ -34,5 +34,6 @@ export default (path1, path2) => {
     }
     return `  ${key}: ${data2[key]}`;
   }));
-  return `{\n\t${result.join('\n\t')}\n}`;
+  const resultStr = result.join('\n\t');
+  return `{\n\t${resultStr}\n}`;
 };
