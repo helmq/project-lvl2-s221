@@ -1,30 +1,30 @@
 import _ from 'lodash';
 
+const signs = {
+  new: '+',
+  deleted: '-',
+  unchanged: ' ',
+  nested: ' ',
+};
+
+const getIndent = depth => ' '.repeat(depth);
+
+const stringify = (key, value, sign, depth) => {
+  const stringifyObject = object =>
+    Object.keys(object).map(k => stringify(k, object[k], signs.unchanged, depth + 1));
+
+  const indent = getIndent(depth);
+  if (_.isObject(value)) {
+    return [
+      `${indent}${sign} ${key}: {`,
+      stringifyObject(value),
+      `${indent}}`,
+    ];
+  }
+  return `${indent}${sign} ${key}: ${value}`;
+};
+
 const parse = (ast) => {
-  const signs = {
-    new: '+',
-    deleted: '-',
-    unchanged: ' ',
-    nested: ' ',
-  };
-
-  const getIndent = depth => ' '.repeat(depth);
-
-  const stringify = (key, value, sign, depth) => {
-    const stringifyObject = object =>
-      Object.keys(object).map(k => stringify(k, object[k], signs.unchanged, depth + 1));
-
-    const indent = getIndent(depth);
-    if (_.isObject(value)) {
-      return [
-        `${indent}${sign} ${key}: {`,
-        stringifyObject(value),
-        `${indent}}`,
-      ];
-    }
-    return `${indent}${sign} ${key}: ${value}`;
-  };
-
   const fmap = ({
     key, type, depth, value, children,
   }) => {
