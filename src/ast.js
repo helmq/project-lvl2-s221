@@ -55,13 +55,13 @@ export const build = (obj1, obj2, depth = 0) => {
   const iter = (key) => {
     const val1 = obj1[key];
     const val2 = obj2[key];
-    if (!val1) {
+    if (!_.has(obj1, key)) {
       const val = _.isObject(val2) ? build(val2, val2, depth + 1) : val2;
       return {
         key, val, type: 'new', depth,
       };
     }
-    if (!val2) {
+    if (!_.has(obj2, key)) {
       const val = _.isObject(val1) ? build(val1, val1, depth + 1) : val1;
       return {
         key, val, type: 'deleted', depth,
