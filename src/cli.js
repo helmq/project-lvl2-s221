@@ -4,10 +4,10 @@ import { version, description } from '../package.json';
 
 export default () => commander
   .version(version)
+  .option('-f, --format [type]', 'output format[type]')
   .arguments('<firstConfig> <secondConfig>')
-  .action((first, second) => {
-    console.log(gendiff(first, second));
+  .action((first, second, option) => {
+    console.log(gendiff(first, second, option.format));
   })
   .description(description)
-  .option('-f, --format [type]', 'output format')
   .parse(process.argv);
