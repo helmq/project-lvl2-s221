@@ -1,1 +1,3 @@
-export default '{\n\t  var1: value1\n\t+ var2: 99009\n\t- var2: value2\n\t  var3: 455\n\t  var10: value10\n\t+ var11: value11\n\t- var11: 999999\n\t+ var9: value9\n}';
+export const flat = '{\n\t  var1: value1\n\t- var2: value2\n\t+ var2: 99009\n\t  var3: 455\n\t  var10: value10\n\t- var11: 999999\n\t+ var11: value11\n\t+ var9: value9\n}';
+
+export const recursive = '{\n\t  common: {\n\t   setting1: Value 1\n\t - setting2: 200\n\t - setting3: true\n\t + setting3: {\n\t    key: value\n\t }\n\t   setting6: {\n\t    key: value\n\t  + ops: vops\n\t }\n\t + setting4: blah blah\n\t + setting5: {\n\t    key5: value5\n\t }\n\t}\n\t  group1: {\n\t - baz: bas\n\t + baz: bars\n\t   foo: bar\n\t - nest: {\n\t    key: value\n\t }\n\t + nest: str\n\t}\n\t- group2: {\n\t   abc: 12345\n\t}\n\t+ group3: {\n\t   fee: 100500\n\t}\n}';
