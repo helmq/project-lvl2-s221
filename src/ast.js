@@ -5,11 +5,11 @@ const build = (obj1, obj2, depth = 0) => {
   return keys.map((key) => {
     const value1 = obj1[key];
     const value2 = obj2[key];
-    if (!_.has(obj1, key)) {
+    if (!_.has(obj1, key) && _.has(obj2, key)) {
       return {
         key, value: value2, type: 'new', depth,
       };
-    } else if (!_.has(obj2, key)) {
+    } else if (_.has(obj1, key) && !_.has(obj2, key)) {
       return {
         key, value: value1, type: 'deleted', depth,
       };

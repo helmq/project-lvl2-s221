@@ -11,20 +11,20 @@ const parsers = {
   '.ini': ini.parse,
 };
 
-const parseFile = (extension, file) =>
-  (parsers[extension] ? parsers[extension](file) : null);
+const parseFile = (extension, content) =>
+  (parsers[extension] ? parsers[extension](content) : null);
 
 export default (path1, path2, format = 'recurse') => {
-  const file1 = fs.readFileSync(path1, 'utf-8');
-  const extension1 = path.extname(path1);
-  const file2 = fs.readFileSync(path2, 'utf-8');
-  const extension2 = path.extname(path2);
-  const data1 = parseFile(extension1, file1);
-  const data2 = parseFile(extension2, file2);
-  if (!data1 || !data2) {
+  const fileContent1 = fs.readFileSync(path1, 'utf-8');
+  const fileContent2 = fs.readFileSync(path2, 'utf-8');
+  const fileExtension1 = path.extname(path1);
+  const fileExtension2 = path.extname(path2);
+  const parsedContent1 = parseFile(fileExtension1, fileContent1);
+  const parsedContent2 = parseFile(fileExtension2, fileContent2);
+  if (!parsedContent1 || !parsedContent2) {
     return 'Error';
   }
-  const ast = build(data1, data2);
+  const ast = build(parsedContent1, parsedContent2);
   const renderer = getRenderer(format);
   return renderer(ast);
 };
