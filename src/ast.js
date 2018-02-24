@@ -5,19 +5,19 @@ const build = (obj1, obj2, depth = 0) => {
   return keys.map((key) => {
     const value1 = obj1[key];
     const value2 = obj2[key];
-    if (!_.has(obj1, key) || !_.has(obj2, key)) {
-      const value = _.has(obj1, key) ? value1 : value2;
-      const type = _.has(obj1, key) ? 'deleted' : 'new';
+    if (!_.has(obj1, key)) {
       return {
-        key, value, type, depth,
+        key, value: value2, type: 'new', depth,
       };
-    }
-    if (_.isObject(value1) && _.isObject(value2)) {
+    } else if (!_.has(obj2, key)) {
+      return {
+        key, value: value1, type: 'deleted', depth,
+      };
+    } else if (_.isObject(value1) && _.isObject(value2)) {
       return {
         key, children: build(value1, value2, depth + 1), type: 'nested', depth,
       };
-    }
-    if (value1 === value2) {
+    } else if (value1 === value2) {
       return {
         key, value: value1, type: 'unchanged', depth,
       };
