@@ -7,11 +7,11 @@ const build = (obj1, obj2, depth = 0) => {
     const value2 = obj2[key];
     if (!_.has(obj1, key) && _.has(obj2, key)) {
       return {
-        key, value: value2, type: 'new', depth,
+        key, oldValue: value2, newValue: value2, type: 'new', depth,
       };
     } else if (_.has(obj1, key) && !_.has(obj2, key)) {
       return {
-        key, value: value1, type: 'deleted', depth,
+        key, oldValue: value1, newValue: value1, type: 'deleted', depth,
       };
     } else if (_.isObject(value1) && _.isObject(value2)) {
       return {
@@ -19,11 +19,11 @@ const build = (obj1, obj2, depth = 0) => {
       };
     } else if (value1 === value2) {
       return {
-        key, value: value1, type: 'unchanged', depth,
+        key, oldValue: value1, newValue: value2, type: 'unchanged', depth,
       };
     }
     return {
-      key, value: [value1, value2], type: 'changed', depth,
+      key, oldValue: value1, newValue: value2, type: 'changed', depth,
     };
   });
 };

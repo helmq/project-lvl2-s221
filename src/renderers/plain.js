@@ -5,23 +5,22 @@ const valConvertIfString = val =>
 
 const parse = (ast, parent = null) => {
   const iter = ({
-    key, type, value, children,
+    key, type, oldValue, newValue, children,
   }) => {
     const newKey = parent ? `${parent}.${key}` : key;
     switch (type) {
       case 'deleted':
         return `Property '${newKey}' was removed`;
       case 'new': {
-        const checkedVal = valConvertIfString(value);
+        const checkedVal = valConvertIfString(newValue);
         const val = _.isObject(checkedVal) ? 'complex value' : `value: ${checkedVal}`;
         return `Property '${newKey}' was added with ${val}`;
       }
       case 'nested':
         return parse(children, newKey);
       case 'changed': {
-        const [value1, value2] = value;
-        const checkedVal1 = valConvertIfString(value1);
-        const checkedVal2 = valConvertIfString(value2);
+        const checkedVal1 = valConvertIfString(oldValue);
+        const checkedVal2 = valConvertIfString(newValue);
         const val1 = _.isObject(checkedVal1) ? 'complex value' : checkedVal1;
         const val2 = _.isObject(checkedVal2) ? 'complex value' : checkedVal2;
         return `Propery '${newKey}' was updated. From ${val1} to ${val2}`;

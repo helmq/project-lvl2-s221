@@ -26,13 +26,13 @@ const stringify = (key, value, sign, depth) => {
 
 const parse = (ast) => {
   const fmap = ({
-    key, type, depth, value, children,
+    key, type, depth, oldValue, newValue, children,
   }) => {
     switch (type) {
       case 'new':
       case 'deleted':
       case 'unchanged':
-        return stringify(key, value, signs[type], depth);
+        return stringify(key, newValue, signs[type], depth);
       case 'nested': {
         const indent = getIndent(depth);
         return [
@@ -42,10 +42,9 @@ const parse = (ast) => {
         ];
       }
       case 'changed': {
-        const [value1, value2] = value;
         return [
-          stringify(key, value1, signs.deleted, depth),
-          stringify(key, value2, signs.new, depth),
+          stringify(key, oldValue, signs.deleted, depth),
+          stringify(key, newValue, signs.new, depth),
         ];
       }
       default:
